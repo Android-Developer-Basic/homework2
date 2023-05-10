@@ -1,27 +1,30 @@
-interface Drink {
-    fun getDescription(): String
-}
-
-class Shake: Drink {
-    override fun getDescription(): String {
-        return "Shake"
+class decorator {
+    interface Drink {
+        fun getComposition(): String
     }
-}
 
-class MangoDecorator(private val drink: Drink): Drink {
-    override fun getDescription(): String {
-        return drink.getDescription() + " & mango"
+    class Cocktail: Drink {
+        override fun getComposition(): String {
+            return "Cocktail"
+        }
     }
-}
 
-class PassionFruitDecorator(private val drink: Drink): Drink {
-    override fun getDescription(): String {
-        return drink.getDescription() + " & passion fruit"
+    class WithVodka(private val drink: Drink): Drink {
+        override fun getComposition(): String {
+            return drink.getComposition() + "Vodka"
+        }
     }
-}
 
-class SugarDecorator(private val drink: Drink): Drink {
-    override fun getDescription(): String {
-        return drink.getDescription() + " & sugar"
+    class WithWiskey(private val drink: Drink): Drink {
+        override fun getComposition(): String {
+            return drink.getComposition() + "Wiskey"
+        }
     }
+
+    class WithIce(private val drink: Drink): Drink {
+        override fun getComposition(): String {
+            return drink.getComposition() + "with Ice"
+        }
+    }
+
 }
