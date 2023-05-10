@@ -1,55 +1,58 @@
-class DrinkItem(var description: String = "drink")
+class BilderCocktail (var composition: String = "drink")
 
-class DrinkBuilder {
-    private var drink = DrinkItem()
 
-    fun reset() = apply {
-        drink = DrinkItem()
+    class DrinkBuilder {
+        private var drink = BilderCocktail()
+
+        fun reset() = apply {
+            drink = BilderCocktail()
+        }
+
+        fun build(): BilderCocktail { return drink }
+
+        fun addWater() = apply {
+            drink.composition += "Water"
+        }
+
+        fun addIce() = apply {
+            drink.composition += "ICE"
+        }
+        fun addVodka() = apply {
+            drink.composition += "VODKA"
+        }
+
+        fun addTomato() = apply {
+            drink.composition += "Tomato"
+        }
+
+        fun addWhisky() = apply {
+            drink.composition += "Whisky"
+        }
+
+        fun addCocaCola() = apply {
+            drink.composition += "CocaCola"
+        }
+
+
     }
 
-    fun build(): DrinkItem { return drink }
-
-    fun addColdWater() = apply {
-        drink.description += " & cold water"
-    }
-
-    fun addHotWater() = apply {
-        drink.description += " & hot water"
-    }
-
-    fun addBlackTea() = apply {
-        drink.description += " & black tea"
-    }
-
-    fun addIce() = apply {
-        drink.description += " & ice"
-    }
-
-    fun addSugar() = apply {
-        drink.description += " & sugar"
-    }
-
-    fun addFruits() = apply {
-        drink.description += " & fruits"
-    }
-}
-
-class Director() {
-    fun makeShake(builder: DrinkBuilder): DrinkItem {
-        return builder
+    class Director() {
+        fun makeDrink1(builder: DrinkBuilder): BilderCocktail {
+            return builder
                 .reset()
+                .addWhisky()
+                .addCocaCola()
+                .addWater()
                 .addIce()
-                .addFruits()
-                .addSugar()
                 .build()
-    }
+        }
 
-    fun makeTea(builder: DrinkBuilder): DrinkItem {
-        return  builder
+        fun makeBloodMary(builder: DrinkBuilder): BilderCocktail {
+            return  builder
                 .reset()
-                .addHotWater()
-                .addBlackTea()
-                .addSugar()
+                .addVodka()
+                .addTomato()
+                .addWater()
                 .build()
+        }
     }
-}
