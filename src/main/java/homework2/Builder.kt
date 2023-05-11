@@ -47,10 +47,27 @@ class Progger : Builder  {
     override fun skill(value: Skill) = apply { skill = value }
     override fun age(value: Int) = apply { age = value }
     override fun requiredSalary(value: Int) = apply { requiredSalary = value }
-    override fun build() = this
+    override fun build() = Progger().name(name).age(age).education(education).skill(skill).requiredSalary(requiredSalary)
 }
 
 fun main() {
+    println("-----------------------------")
+    val builder = Progger()
+        .name("Семён Слепаков")
+        .age(25)
+        .education(Education.Secondary)
+        .skill(Skill.Senior)
+        .requiredSalary(125444)
+
+    val progger1 = builder.build()
+    val progger2 = builder.build()
+    println("-----------------------------")
+    println(progger1.information())
+    println(progger1.validateProgger(Skill.Senior, 123123))
+    println("-----------------------------")
+    println(progger2.information())
+    println(progger2.validateProgger(Skill.Senior, 321321))
+
     println("-----------------------------")
     val firstProgger = Progger()
         .name("Сергей Антипов")
