@@ -19,7 +19,7 @@ interface Builder
     fun skill(value: Skill) : Builder
     fun age(value: Int) : Builder
     fun requiredSalary(value: Int) : Builder
-    fun build() : Builder
+    fun build():Progger
 }
 
 class Progger : Builder  {
