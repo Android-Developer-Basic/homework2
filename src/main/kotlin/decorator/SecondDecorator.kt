@@ -36,6 +36,7 @@ class Vegetables(pizza: Pizza) : PizzaDecorator(pizza){
 }
 
 fun main(){
+
     val badPizza = BasicPizza()
     println("${badPizza.getDescription()} ${badPizza.getTotalPrice()}")
 
@@ -49,8 +50,10 @@ fun main(){
     println("${awesomePizza.getDescription()} ${awesomePizza.getTotalPrice()}")
 
     val allIngredients = Meat(Cheese(Vegetables(pizza = BasicPizza())))
-
     println("${allIngredients.getDescription()} ${allIngredients.getTotalPrice()}")
+
+    val veganPizza = Cheese(Vegetables(pizza = BasicPizza()))
+    println("${veganPizza.getDescription()} ${veganPizza.getTotalPrice()}")
 
 
 }
