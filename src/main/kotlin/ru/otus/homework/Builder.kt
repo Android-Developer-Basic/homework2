@@ -17,7 +17,6 @@ class Car(
     }
 }
 
-
 fun main() {
     val car = Car.Builder()
         .model("Ford Focus")

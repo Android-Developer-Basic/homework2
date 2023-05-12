@@ -18,7 +18,6 @@ abstract class TreeDecorator
 }
 
 class BubbleLights(tree: ChristmasTree) : TreeDecorator(tree) {
-
     override fun decorate(): String {
         return super.decorate() + decorateWithBubbleLights()
     }
