@@ -3,62 +3,56 @@ package ru.otus.homework2
 Попытка реализации Паттерна "Command"
 * */
 
-// as a Command interface
+// Define a command interface
 interface Command {
     fun execute()
-    fun undo()
 }
-// as a concrete Command
-class BandCommand(private val receiver: Band) : Command {
+// Concrete command
+class Kettle(private val smartHome: SmartHome) : Command {
     override fun execute() {
-        receiver.playMusic()
-    }
-
-    override fun undo() {
-        receiver.stopPlayingMusic()
+        smartHome.boilWater()
     }
 }
-// as a concrete Command
-class SingerCommand(private val receiver: Singer): Command {
+// Concrete command
+class Toaster(private val smartHome: SmartHome) : Command {
     override fun execute() {
-        receiver.singASong()
+        smartHome.toastBread()
+    }
+}
+// SmartHome as a Receiver
+class SmartHome {
+    fun boilWater() {
+        println("SmartHome is boiling water")
     }
 
-    override fun undo() {
-        receiver.isNotSinging()
+    fun toastBread() {
+        println("SmartHome is toasting bread")
+    }
+}
+// Define an invoker
+class ControlPanel {
+    private var command: Command? = null
+
+    fun setCommand(command: Command) {
+        this.command = command
+    }
+
+    fun executeCommand() {
+        command?.execute()
     }
 }
 
-// as a Receiver
-class Band(private val bandName: String) {
-    fun playMusic() {
-        println("The $bandName are playing music, as hard as they only can")
-    }
+fun main() {
+    val smartHome = SmartHome()
 
-    fun stopPlayingMusic() {
-        println("Have a good night, folks!")
-    }
-}
+    val kettleCommand = Kettle(smartHome)
+    val toasterCommand = Toaster(smartHome)
 
-// as a Receiver
-class Singer(private val name: String){
-    fun singASong() {
-        println("$name is singing like a nightingale")
-    }
+    val controlPanel = ControlPanel()
 
-    fun isNotSinging(){
-        println("$name has left the building")
-    }
-}
-// as an Invoker
-class Festival {
-    private val commands = mutableListOf<Command>()
+    controlPanel.setCommand(kettleCommand)
+    controlPanel.executeCommand()
 
-    fun addCommand(command: Command) {
-        commands.add(command)
-    }
-
-    fun run() {
-        commands.forEach { it.execute() }
-    }
+    controlPanel.setCommand(toasterCommand)
+    controlPanel.executeCommand()
 }

@@ -2,11 +2,37 @@ package ru.otus.homework2
 
 //реализация паттерна Decorator
 
-class Cheese (val name: String, val fat: Int, var storageLifeInDays: Int, val country: String) {
-    fun isFresh(): String = if (this.storageLifeInDays > 0) "The cheese is still fresh."
-    else throw IllegalArgumentException("Sell $name at a discount immediately!!!")
+interface Artist {
+    fun perform()
 }
 
-fun Cheese.isRoquefort() {
-    if(name == "Roquefort") println("Its smell will make you beg for mercy") else println("$name is not Roquefort")
+class Musician: Artist{
+    override fun perform() {
+        println("Let's get this party started!!!\n")
+    }
+}
+
+open class MusicDecorator(private val artist: Artist): Artist {
+    override fun perform(){
+        artist.perform()
+    }
+}
+
+class Guitarist(artist: Artist): MusicDecorator(artist) {
+    override fun perform() {
+        super.perform()
+        println("My guitar gently weeps...")
+    }
+}
+
+class Bluesman(artist: Artist): MusicDecorator(artist) {
+    override fun perform() {
+        super.perform()
+        println("Give me something to sing!")
+    }
+}
+
+fun main() {
+    val johnLeeHooker: Artist = Guitarist(Bluesman(Musician()))
+    johnLeeHooker.perform()
 }

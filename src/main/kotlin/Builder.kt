@@ -32,3 +32,18 @@ class Product private constructor(
         }
     }
 }
+
+fun main() {
+
+    println("Введите сумму депозита:")
+
+    val drMartens = Product.Builder()
+        .setName("Dr.Martens 69's Stompers")
+        .setPrice(19999.0)
+        .setDescription("Ботинки из кожи розового единорога")
+        .build()
+
+    val cashMoney = readln().toDouble()
+
+    println(if (cashMoney >= drMartens.price) "Пришла пора заказать ${drMartens.name}!" else "Не тратьте ваши $cashMoney, накопите ещё, и ждите Чёрную Пятницу.")
+}
