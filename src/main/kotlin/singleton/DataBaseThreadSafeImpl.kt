@@ -1,20 +1,45 @@
 package singleton
 
-class DataBaseThreadSafeImpl private constructor() : DataBase {
-    override fun insert() {
-        println("DataBaseThreadSafe: item inserted")
+import builder.Customer
+
+class DataBaseThreadSafeImpl private constructor() : DataBase<Customer> {
+
+    private var list: MutableList<Customer> = mutableListOf()
+
+    override fun insert(item: Customer) {
+        if (list.add(item)) {
+            println("DataBaseSimple: $item inserted")
+        }
     }
 
-    override fun delete() {
-        println("DataBaseThreadSafe: item deleted")
+    override fun delete(item: Customer) {
+        if (list.remove(item)) {
+            println("DataBaseSimple: $item deleted")
+        }
     }
 
-    override fun update() {
-        println("DataBaseThreadSafe: item updated")
+    override fun update(item: Customer) {
+        val newList = list.map {
+            if (it.id == item.id)
+                it.copy(
+                    it.id,
+                    item.name,
+                    item.age,
+                    item.status)
+            else it
+        }
+        list = newList.toMutableList()
+        println("DataBaseSimple: $item updated")
     }
 
-    override fun select() {
-        println("DataBaseThreadSafe: item selected")
+    override fun select(vararg items: Customer): List<Customer> {
+        val result = mutableListOf<Customer>()
+        items.forEach {
+            if (list.contains(it)) {
+                result.add(it)
+            }
+        }
+        return result
     }
 
     companion object {

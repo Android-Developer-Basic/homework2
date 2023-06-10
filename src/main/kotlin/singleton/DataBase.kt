@@ -1,9 +1,9 @@
 package singleton
 
-interface DataBase {
-    fun insert()
-    fun delete()
-    fun update()
-    fun select()
+interface DataBase<T> {
+    fun insert(item: T)
+    fun delete(item: T)
+    fun update(item: T)
+    fun select(vararg items: T): List<T>
 }
 
