@@ -2,8 +2,8 @@ package singleton
 
 interface DataBase<T> {
     fun insert(item: T)
-    fun delete(item: T)
+    fun delete(id: Int)
     fun update(item: T)
-    fun select(vararg items: T): List<T>
+    fun select(id: Int): T
 }
 
