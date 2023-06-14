@@ -1,6 +1,6 @@
 package builder
 
-class CustomerBuilderImpl private constructor(): CustomerBuilder {
+class CustomerBuilderImpl : CustomerBuilder {
 
     private var _name: String = DEFAULT_NAME
     private var _age: Int? = null
@@ -32,7 +32,5 @@ class CustomerBuilderImpl private constructor(): CustomerBuilder {
         private var id: Int = 0
         private const val DEFAULT_NAME: String = "New customer"
         private const val MIN_AGE = 18
-
-        val instance: CustomerBuilderImpl by lazy { CustomerBuilderImpl() }
     }
 }
