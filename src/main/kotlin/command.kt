@@ -1,14 +1,14 @@
-interface Command<T> {
+interface Command {
     fun execute()
     fun cancel()
     fun name(): String
 }
 
 class Shell {
-    fun <T> launch(c: Command<T>) = c.execute()
+    fun launch(c: Command) = c.execute()
 }
 
-class SumNumbersCommand(private vararg val args: Double?) : Command<Double> {
+class SumNumbersCommand(private vararg val args: Double?) : Command {
     override fun execute() = println(args.filterNotNull().sum())
 
     override fun cancel() = TODO("Not yet implemented")
@@ -16,7 +16,7 @@ class SumNumbersCommand(private vararg val args: Double?) : Command<Double> {
     override fun name(): String = "sum"
 }
 
-class SortNumbersCommand(private vararg val args: Int?) : Command<Int> {
+class SortNumbersCommand(private vararg val args: Int?) : Command {
     override fun execute() = println(args.filterNotNull().sorted())
 
     override fun cancel() = TODO("Not yet implemented")
