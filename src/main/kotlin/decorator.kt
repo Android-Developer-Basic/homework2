@@ -1,17 +1,27 @@
-interface Decorator {
-    fun printPath() = println(
-        this::class.annotations
-            .firstNotNullOfOrNull { it as? Path }
-            ?.value
-            ?: "https://otus.ru"
-    )
+abstract class MenuItem(private val previous: MenuItem?) {
+    fun process(name: String): String =
+        "${previous?.let { "${it.process(name)}, " } ?: "$name's dinner: "}${serve()}"
 
+    protected abstract fun serve(): String
 }
 
-@Path("https://otus.ru/online")
-class Decorated : Decorator
+class Soup(previous: MenuItem? = null) : MenuItem(previous) {
+    override fun serve(): String = "soup"
+}
 
-annotation class Path(val value: String)
+class Salad(previous: MenuItem? = null) : MenuItem(previous) {
+    override fun serve(): String = "salad"
+}
 
+class Entree(previous: MenuItem? = null) : MenuItem(previous) {
+    override fun serve(): String = "entree"
+}
 
-fun main() = Decorated().printPath()
+class Dessert(previous: MenuItem? = null) : MenuItem(previous) {
+    override fun serve(): String = "dessert"
+}
+
+fun main() {
+    println(Dessert(Entree(Salad(Soup()))).process("Anton"))
+    println(Dessert(Salad()).process("Maria"))
+}
