@@ -3,55 +3,43 @@ package ru.otus.homework
 /**
  * Паттерн Builder
  */
-open class HouseBuilder {
-    private var floors: Int? = null
-    private var area: Double? = null
-    private var painting: Boolean? = null
-    private var material: String? = null
 
-    fun setFloors(i: Int){
-        this.floors=i
-    }
-    fun getFloors(): Int?{
-        return this.floors
-    }
-    fun setArea(d: Double){
-        this.area=d
-    }
-    fun getArea(): Double?{
-        return this.area
-    }
-    fun setPainting(b: Boolean){
-        this.painting=b
-    }
-    fun getPainting(): Boolean? {
-        return this.painting
-    }
-    fun setMaterial(s: String){
-        this.material=s
-    }
-    fun getMaterial(): String? {
-        return this.material
-    }
-}
+class House(
+    private var floors: Int,
+    private var area: Double,
+    private var painting: Boolean?,
+    private var material: String?
+) {
+    private constructor(builder: Builder) : this(builder.floors, builder.area, builder.painting, builder.material)
 
-class House(var houseBuilder: HouseBuilder) {
-    fun build(): String {
+    companion object {
+        inline fun build(floors: Int, area: Double, otherParam: Builder.() -> Unit) = Builder(floors, area).apply(otherParam).build()
+    }
+    class Builder(var floors: Int, var area: Double) {
+        var painting: Boolean? = null
+        var material: String? = null
+
+        fun build(): House {
+            return House(this)
+        }
+    }
+
+    override fun toString(): String {
         return """Ваш новый дом 
-            Этажей: ${houseBuilder.getFloors()}
-            Площадь: ${houseBuilder.getArea()}
-            Покраска: ${houseBuilder.getPainting()}
-            Материал стен: ${houseBuilder.getMaterial()}
+            Этажей: ${this.floors}
+            Площадь: ${this.area}
+            Покраска: ${this.painting}
+            Материал стен: ${this.material}
             """
     }
 }
 
 fun main() {
-    val builder = HouseBuilder()
-    builder.setFloors(2)
-    builder.setArea(230.4)
-    builder.setMaterial("кирпич")
 
-    val house = House(builder)
-    println( house.build() )
+    val house1 = House.build(2, 200.0){}
+    println(house1)
+
+    // вариант создания дома с доп параметрами
+    val house2 = House.build(1, 150.0) { material="кирпич"; painting=true }
+    println(house2)
 }
