@@ -1,30 +1,43 @@
 package ru.otus.patterns
 
-interface Camera {
-    fun takePicture()
-    fun addFilter()
+import kotlin.random.Random
+
+fun main() {
+    WithRepeat(PhoneInstance()).makeCall()
 }
+
 
 interface Phone {
-    fun makeCall()
-    fun installApp()
+    fun makeCall(): Boolean
 }
 
-class CameraPhone(private val camera: Camera, private val phone: Phone) : Camera, Phone {
-    override fun takePicture() {
-        camera.takePicture()
-    }
 
-    override fun addFilter() {
-        camera.addFilter()
-    }
+class PhoneInstance() : Phone {
+    override fun makeCall(): Boolean {
+        println("Try calling...")
 
-    override fun makeCall() {
-        phone.makeCall()
-    }
-
-    override fun installApp() {
-        phone.installApp()
+        val success = Random.nextInt(0, 10)
+        return success == 1
     }
 }
+
+
+class WithRepeat(private val phone: PhoneInstance) : Phone {
+    override fun makeCall(): Boolean {
+        fun trying() {
+            val success = phone.makeCall()
+
+            if (!success) {
+                println("Error Call")
+                println("Calling a second time")
+                trying()
+            }
+        }
+
+        trying()
+
+        return true
+    }
+}
+
 
