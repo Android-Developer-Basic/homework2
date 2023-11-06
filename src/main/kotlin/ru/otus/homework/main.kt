@@ -8,16 +8,34 @@ object SingletonExample {
     }
 }
 
+class SingletonExampleClass() {
+    var foo: String?=null
+
+    init {
+        println("Singleton Example Class init")
+        this.foo = "foo"
+    }
+    companion object {
+        val instance:SingletonExampleClass by lazy {
+            SingletonExampleClass()
+        }
+        fun getSInstance():SingletonExampleClass {
+            return instance
+        }
+    }
+
+}
+
 open class DecoratorClass(val foo: String="") {
-    open fun Display() {
+    open fun display() {
         println(foo)
     }
 }
 
 class DecoratorExample(val decorator: DecoratorClass):DecoratorClass(decorator.foo) {
-    override fun Display() {
+    override fun display() {
         println("Decorate it:")
-        decorator.Display()
+        decorator.display()
     }
 }
 
@@ -28,24 +46,34 @@ interface Command {
 class PrintCommand:Command {
     val cmd = "Print"
     override fun run() {
-        println(cmd)
+        print(cmd)
     }
 }
 
 class HelpCommand:Command {
     val cmd = "Help"
     override fun run() {
-        println(cmd)
+        print(cmd)
     }
 }
 
 class CommandRunner {
     fun executeCommand(command: Command) {
         command.run()
+        println()
     }
 }
 
-class CommandList:Command {
+class CommandList(private var prefix: String, private var suffix: String) :Command {
+
+    data class Builder(
+        var prefix: String? = null,
+        var suffix: String? = null
+    ) {
+        fun prefix(prefix: String) = apply {this.prefix=prefix}
+        fun suffix(suffix: String) = apply {this.suffix=suffix}
+        fun build() = CommandList(prefix ?: "",suffix ?: "")
+    }
     private val execs = mutableListOf<Command>()
 
     fun first(command: Command): CommandList {
@@ -58,23 +86,25 @@ class CommandList:Command {
         execs.add(command)
         return this
     }
-
     override fun run() {
         execs.forEach {exec ->
+            print(prefix)
             exec.run()
+            println(suffix)
         }
     }
 }
 
 fun main() {
     println("=====> Синглтон с ленивой инициализацией")
-    println("Foo value (first call): ${SingletonExample.foo}")
-    println("Foo value (second call): ${SingletonExample.foo}")
+    val instance = SingletonExampleClass.getSInstance()
+    println("Foo value (first call): ${instance.foo}")
+    println("Foo value (second call): ${instance.foo}")
     println()
 
     println("====> Декоратор")
     val de = DecoratorExample(DecoratorClass("Example"))
-    de.Display()
+    de.display()
     println()
 
     println("====> Команда")
@@ -84,6 +114,7 @@ fun main() {
     println()
 
     println("====> Билдер")
-    val list=CommandList().first(HelpCommand()).then(PrintCommand())
+    val list=CommandList.Builder().prefix("prefix->").suffix("<-suffix").build()
+    list.first(HelpCommand()).then(PrintCommand())
     list.run()
 }
