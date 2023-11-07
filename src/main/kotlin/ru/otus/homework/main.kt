@@ -8,7 +8,7 @@ object SingletonExample {
     }
 }
 
-class SingletonExampleClass() {
+class SingletonExampleClass private constructor() {
     var foo: String?=null
 
     init {
