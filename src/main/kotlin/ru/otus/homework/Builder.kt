@@ -1,54 +1,67 @@
 package ru.otus.homework
 
+abstract class Meat
+class Chicken: Meat()
+class Beef: Meat()
 
-interface Component
+abstract class Sauce
+class CheeseSauce: Sauce()
+class SpicySauce: Sauce()
 
-class Meat : Component
 
-class Sauce : Component
+interface Builder {
+    var name: String
+    var meat: Meat
+    var sauce: Sauce
+    var cost: Int
+    var cheese: Boolean
 
-class Bread : Component
-
-class Cheese : Component
-
-data class Burger (val name: String) {
-    var meat: Meat? = null
-    var sauce: Sauce? = null
-    var bread: Bread? = null
-    var cheese: Cheese? = null
+    fun getBurger(): Burger
 }
 
-class MacBuilder {
-    companion object {
-        fun build() : Burger {
-            val burger = Burger("MacDonalds burger")
-            burger.bread = Bread()
-            burger.cheese = Cheese()
-            return burger
-        }
+class BurgerBuilder : Builder {
+    override var name: String = "NoName"
+
+    override lateinit var meat: Meat
+
+    override lateinit var sauce: Sauce
+
+    override var cost: Int = 100
+
+    override var cheese: Boolean = false
+    override fun getBurger(): Burger {
+        return Burger(name, meat, sauce, cost, cheese)
     }
 }
 
-class KfcBuilder {
-    companion object {
-        fun build() : Burger {
-            val burger = Burger("KFC Burger")
-            burger.bread = Bread()
-            burger.sauce = Sauce()
-            burger.cheese = Cheese()
-            burger.meat = Meat()
-            return burger
-        }
+data class Burger(val name: String, val meat: Meat, val sauce: Sauce, val cost: Int, val cheese: Boolean)
+
+class Director {
+    fun createKfcBurger(builder: BurgerBuilder) {
+        builder.name = "KFC burger"
+        builder.cost = 150
+        builder.meat = Chicken()
+        builder.sauce = CheeseSauce()
+        builder.cheese = true
+    }
+    fun createMacBurger(builder: BurgerBuilder) {
+        builder.name = "MacDonald's Burger"
+        builder.cost = 120
+        builder.meat = Beef()
+        builder.sauce = SpicySauce()
+        builder.cheese = false
     }
 }
 
 fun main() {
-    val kfc = KfcBuilder.build()
-    val mac = MacBuilder.build()
-    val burger = Burger("Simple Burger")
+    val director = Director()
+    val burgerBuilder = BurgerBuilder()
+    director.createKfcBurger(burgerBuilder)
+    val kfcBurger = burgerBuilder.getBurger()
+    println(kfcBurger.toString())
 
-    println(kfc.toString())
-    println(mac.toString())
-    println(burger.toString())
+    director.createMacBurger(burgerBuilder)
+    val macBurger = burgerBuilder.getBurger()
+    println(macBurger.toString())
 
 }
